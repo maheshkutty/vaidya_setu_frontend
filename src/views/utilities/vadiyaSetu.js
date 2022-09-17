@@ -25,7 +25,8 @@ import { useEffect, useState } from "react";
 import AuthContext from "AuthContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import health from "../../../src/api/health";
+import health from "api/health";
+import { connect } from "react-redux";
 // ==============================|| TYPOGRAPHY ||============================== //
 // import Particle from "themes/particle";
 
@@ -56,21 +57,20 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
   },
 }));
 
-const getRequestsData = async (AuthState) => {
-  console.log(AuthState.state.id);
-  var data = { email: AuthState.state.email };
-  let response = await health.post("/patient/read", data, {
-    headers: {
-      pid: AuthState.state.id,
-      Authorization: "Bearer " + AuthState.state.auth_token,
-    },
-  });
-  response = await response.data;
+const VadiyaSetu = ({ userSession }) => {
+  const getRequestsData = async () => {
+    console.log(userSession.id);
+    var data = { email: userSession.email };
+    let response = await health.post("/patient/read", data, {
+      headers: {
+        pid: userSession.id,
+        Authorization: "Bearer " + userSession.accessToken,
+      },
+    });
+    response = await response.data;
+    return response;
+  };
 
-  return response;
-};
-
-const VadiyaSetu = () => {
   const theme = useTheme();
   const AuthState = useContext(AuthContext);
   var history = useNavigate();
@@ -96,24 +96,6 @@ const VadiyaSetu = () => {
     } else {
       history("/login");
     }
-
-    // const [isLoading, setLoading] = useState(true);
-    //   useEffect(() => {
-    //       setLoading(false);
-    //       if( AuthState.state.id ){
-    //         if( AuthState.state.role !== 'pat'  ){
-    //           history("/utils/patient-history");
-    //         }else{
-    //           let respons = getRequestsData(AuthState);
-    //           if (respons.status === "success") {
-    //               console.log(respons.payload);
-    //               setUserData(respons.payload);
-
-    //           }
-    //         }
-    //       }else{
-    //         history("/login");
-    //       }
   }, []);
 
   return (
@@ -204,7 +186,7 @@ const VadiyaSetu = () => {
               </Box>
             </Grid>
 
-            
+
 
             <Grid item xs={12} sm={6}>
               <SubCard>
@@ -413,11 +395,16 @@ const VadiyaSetu = () => {
               </Grid>
             </Grid>
           </Grid>
-
         </MainCard>
       }
     </>
   );
 };
 
-export default VadiyaSetu;
+const mapStateToProps = (state) => {
+  return {
+    userSession: state.userSession,
+  };
+};
+
+export default connect(mapStateToProps, {})(VadiyaSetu);

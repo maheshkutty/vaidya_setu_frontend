@@ -35,6 +35,8 @@ const UtilsPatientRecord = Loadable(
   lazy(() => import("views/utilities/PatientRecord"))
 );
 
+import RequireAuth from "RequireAuth";
+
 // sample page routing
 const SamplePage = Loadable(lazy(() => import("views/sample-page")));
 
@@ -62,7 +64,7 @@ const MainRoutes = {
       children: [
         {
           path: "vadiyasetu-card",
-          element: <UtilsTypography />,
+          element: <RequireAuth><UtilsTypography /></RequireAuth>,
         },
       ],
     },
@@ -120,7 +122,7 @@ const MainRoutes = {
           element: <UtilsPatientRecord />,
         },
       ],
-    },    
+    },
     {
       path: "icons",
       children: [

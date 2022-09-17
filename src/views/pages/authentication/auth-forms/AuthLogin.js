@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { loginAction } from "store/actions";
+import { connect } from "react-redux";
 
 // material-ui
 import { useTheme } from "@mui/material/styles";
@@ -18,7 +19,6 @@ import {
   OutlinedInput,
   Stack,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
 
 // third party
@@ -32,34 +32,17 @@ import AnimateButton from "ui-component/extended/AnimateButton";
 // assets
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-
-import Google from "assets/images/icons/social-google.svg";
-import health from "../../../../api/health";
-import axios from "axios";
-import { useContext } from "react";
-import AuthContext from "AuthContext";
 import { useNavigate } from "react-router-dom";
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
-const FirebaseLogin = ({ ...others }) => {
+const FirebaseLogin = (props) => {
   const theme = useTheme();
   const scriptedRef = useScriptRef();
-  const matchDownSM = useMediaQuery(theme.breakpoints.down("md"));
-  const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
-
-  const googleHandler = async () => {
-    console.error("Login");
-  };
-
-  const getPatientData = () => {
-    health.get("", {
-      headers: {},
-    });
-  };
-
   const [showPassword, setShowPassword] = useState(false);
+  var navigate = useNavigate();
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -68,72 +51,24 @@ const FirebaseLogin = ({ ...others }) => {
     event.preventDefault();
   };
 
-  // const loginButton = async (values) => {
-  //     const response = await fetch(`http://20.235.96.205:3005/patient/register`, {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify({
-  //             "name": values.email,
-  //             "password": values.password,
-  //             "address": "mumbai, maharashatra",
-  //             "state": "maharashatra",
-  //             "district": "mumbai",
-  //             "phone": 1234567890
-  //         })
-  //     })
-  //     console.log(await response.json());
-  //     return await response.json();
-  // };
-
-  const AuthState = useContext(AuthContext);
-  var history = useNavigate();
+  useEffect(() => {
+    console.log(props.userSession)
+    if (props.userSession.id != "" && props.userSession.id != undefined ) {
+      navigate("/utils/vadiyasetu-card");
+    }
+  }, [props.userSession]);
 
   async function loginClick(values) {
     var data = {
       email: values.email,
       password: values.password,
     };
-    var response;
-    var session_data = {};
-    if (values.role === "doc") {
-      let response = await health.post("/doctor/login", (data = data));
-      response = await response.data;
-      session_data = {
-        id: response.did,
-        auth_token: response.accessToken,
-        role: "doc",
-        email: values.email,
-      };
-      console.log("Doc", response, session_data);
-    } else {
-      let response = await health.post("/patient/login", (data = data));
-      response = await response.data;
-      session_data = {
-        id: response.pid,
-        auth_token: response.accessToken,
-        role: "pat",
-        email: values.email,
-      };
-      console.log("Pat", response, session_data);
-    }
-    localStorage.setItem("auth_data", JSON.stringify(session_data));
-    AuthState.update(localStorage.getItem("auth_data"));
-    console.log(localStorage.getItem("auth_data"));
-
-    var auth_d = localStorage.getItem("auth_data");
-    if (auth_d.role === "pat") {
-      history("/utils/vadiyasetu-card");
-    } else if (auth_d.role === "doc") {
-      history("/utils/patient-history");
-    } else {
-      history("/dashboard/default");
-    }
+    props.loginAction({ email: data.email, password: data.password });
   }
 
   return (
     <>
       <Grid container direction="column" justifyContent="center" spacing={2}>
-        <h1>{localStorage.getItem("auth_data").id}</h1>
         <Grid item xs={12}>
           <Box
             sx={{
@@ -141,7 +76,6 @@ const FirebaseLogin = ({ ...others }) => {
             }}
           >
             <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-
             <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
           </Box>
         </Grid>
@@ -199,7 +133,7 @@ const FirebaseLogin = ({ ...others }) => {
           touched,
           values,
         }) => (
-          <form noValidate onSubmit={handleSubmit} {...others}>
+          <form noValidate onSubmit={handleSubmit} {...props.others}>
             <FormControl
               fullWidth
               error={Boolean(touched.email && errors.email)}
@@ -334,4 +268,10 @@ const FirebaseLogin = ({ ...others }) => {
   );
 };
 
-export default FirebaseLogin;
+const mapStateToProps = (state) => {
+  return {
+    userSession: state.userSession,
+  };
+};
+
+export default connect(mapStateToProps, { loginAction })(FirebaseLogin);

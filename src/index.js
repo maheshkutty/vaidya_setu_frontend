@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import App from './App';
 import { store } from './store';
+import thunk from "redux-thunk";
 
 // style + assets
 import './assets/scss/style.scss';
