@@ -1,5 +1,5 @@
 import { lazy } from "react";
-
+import RequireAuth from "RequireAuth";
 // project imports
 import MainLayout from "layout/MainLayout";
 import Loadable from "ui-component/Loadable";
@@ -36,7 +36,7 @@ const UtilsPatientRecord = Loadable(
   lazy(() => import("views/utilities/PatientRecord"))
 );
 
-import RequireAuth from "RequireAuth";
+
 
 // sample page routing
 const SamplePage = Loadable(lazy(() => import("views/sample-page")));

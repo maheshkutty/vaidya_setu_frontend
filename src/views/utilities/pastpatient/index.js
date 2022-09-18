@@ -171,7 +171,6 @@ const PatientDetail = ({ isLoading, userSession }) => {
 
 PatientDetail.propTypes = {
 	isLoading: PropTypes.bool,
-	userSession: PropTypes.userSession
 };
 
 const mapStateToProps = (state) => {

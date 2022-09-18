@@ -142,7 +142,6 @@ const ApprovalHistory = ({ isLoading, userSession }) => {
 
 ApprovalHistory.propTypes = {
   isLoading: PropTypes.bool,
-  userSession: PropTypes.userSession
 };
 
 const mapStateToProps = (state) => {
