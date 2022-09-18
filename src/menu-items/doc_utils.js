@@ -7,8 +7,6 @@ import {
   IconFileCheck,
   IconReportMedical,
 } from "@tabler/icons";
-import AuthContext from "AuthContext";
-import { useContext } from "react";
 
 // constant
 const icons = {

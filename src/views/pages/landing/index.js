@@ -2,6 +2,8 @@
 import React from "react";
 // nodejs library that concatenates classes
 import classnames from "classnames";
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 import "assets/vendor/nucleo/css/nucleo.css";
 import "assets/vendor/font-awesome/css/font-awesome.min.css";
@@ -11,10 +13,10 @@ import { withRouter } from "ui-component/withRouter"
 // reactstrap components
 import {
   Badge,
-  Button,
   Card,
   CardBody,
   CardImg,
+  Button,
   FormGroup,
   Input,
   InputGroupAddon,
@@ -33,16 +35,32 @@ import CardsFooter from "ui-component/Footers/CardsFooter.js";
 import Download from "./Download.js";
 
 class Landing extends React.Component {
-  state = {};
+  state = { anchorEl: null, open: false };
   componentDidMount() {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     this.refs.main.scrollTop = 0;
   }
 
-  onSignUp = () =>{
-    this.props.navigate("/register/user-register");
+  onSignUp = (url) => {
+    this.props.navigate(url);
   }
+
+  handleClick = (event) => {
+    this.setState({
+      anchorEl: event.currentTarget
+    }, () => {
+      this.setState({ open: Boolean(this.state.anchorEl) })
+    })
+  };
+
+  handleClose = () => {
+    this.setState({
+      anchorEl: null
+    }, () => {
+      this.setState({ open: false })
+    })
+  };
 
   render() {
     return (
@@ -67,23 +85,39 @@ class Landing extends React.Component {
                   <Row>
                     <Col lg="6">
                       <h1 className="display-3 text-white">
-                       Vaidya Setu, Connecting Privacy to you Health{" "}
-                      
+                        Vaidya Setu, Connecting Privacy to you Health{" "}
+
                       </h1>
                       <p className="lead text-white">
                         One Stop Solution for all the Healthcare StakeHolders
                       </p>
                       <div className="btn-wrapper">
                         <Button
+                          variant="contained"
                           className="btn-icon mb-3 mb-sm-0"
                           color="info"
-                          onClick={this.onSignUp}
+                          aria-controls={this.state.open ? 'basic-menu' : undefined}
+                          aria-haspopup="true"
+                          aria-expanded={this.state.open ? 'true' : undefined}
+                          onClick={this.handleClick}
                         >
                           <span className="btn-inner--icon mr-1">
                             <i className="fa fa-code" />
                           </span>
                           <span className="btn-inner--text">Sign Up</span>
                         </Button>
+                        <Menu
+                          id="basic-menu"
+                          anchorEl={this.state.anchorEl}
+                          open={this.state.open}
+                          onClose={this.handleClose}
+                          MenuListProps={{
+                            'aria-labelledby': 'basic-button',
+                          }}
+                        >
+                          <MenuItem onClick={() => this.onSignUp("/register/Doctor-register")}>As Doctor</MenuItem>
+                          <MenuItem onClick={() => this.onSignUp("/register/user-register")}>As Patient</MenuItem>
+                        </Menu>
                       </div>
                     </Col>
                   </Row>
@@ -123,7 +157,7 @@ class Landing extends React.Component {
                             Give Permission to Doctor
                           </h6>
                           <p className="description mt-3">
-                           After Registering through a Aadhar Based Verification Permission can be Given to to a Doctor After Getting a PoP up on your APP/WebSite, or getting an OTP on your mobile number from Scanning a QR Code/Vadiya Setu Number.
+                            After Registering through a Aadhar Based Verification Permission can be Given to to a Doctor After Getting a PoP up on your APP/WebSite, or getting an OTP on your mobile number from Scanning a QR Code/Vadiya Setu Number.
                           </p>
                           <div>
                             <Badge color="primary" pill className="mr-1">
@@ -136,7 +170,7 @@ class Landing extends React.Component {
                               Innovation
                             </Badge>
                           </div>
-                        
+
                         </CardBody>
                       </Card>
                     </Col>
@@ -150,7 +184,7 @@ class Landing extends React.Component {
                             Doctor Uploading Medical Record
                           </h6>
                           <p className="description mt-3">
-                           Upon receiving Permission from patient Doctor can go through his/her Medical record, health parameters and can upload Medical Reports which is stored in a blockchain porwed by 
+                            Upon receiving Permission from patient Doctor can go through his/her Medical record, health parameters and can upload Medical Reports which is stored in a blockchain porwed by
                           </p>
                           <div>
                             <Badge color="success" pill className="mr-1">
@@ -163,7 +197,7 @@ class Landing extends React.Component {
                               Uncompomised
                             </Badge>
                           </div>
-                  
+
                         </CardBody>
                       </Card>
                     </Col>
@@ -190,7 +224,7 @@ class Landing extends React.Component {
                               Easy to use
                             </Badge>
                           </div>
-                  
+
                         </CardBody>
                       </Card>
                     </Col>
@@ -215,7 +249,7 @@ class Landing extends React.Component {
                       <i className="ni ni-settings-gear-65" />
                     </div>
                     <h3>Awesome features</h3>
-                    
+
                     <ul className="list-unstyled mt-5">
                       <li className="py-2">
                         <div className="d-flex align-items-center">
@@ -305,8 +339,8 @@ class Landing extends React.Component {
                         Problem Statement
                       </h4>
                       <p className="text-italic text-white">
-                        	
-"The public service delivery has witnessed various enhancements and disruptions caused by Aadhaar. Further, complementary new technologies like Blockchain has the capability to create <b>new resident centric products and services to further improvise service delivery</b>. Perhaps, the real disruption potential of these combinations of technologies has yet to be seized. Your task is to explore the possibilities in Government domains (Central/State/Municipal/Panchayat) and <b> create innovative and meaningful resident centric applications or solutions using any of the open source blockchain technologies.</b>"
+
+                        "The public service delivery has witnessed various enhancements and disruptions caused by Aadhaar. Further, complementary new technologies like Blockchain has the capability to create <b>new resident centric products and services to further improvise service delivery</b>. Perhaps, the real disruption potential of these combinations of technologies has yet to be seized. Your task is to explore the possibilities in Government domains (Central/State/Municipal/Panchayat) and <b> create innovative and meaningful resident centric applications or solutions using any of the open source blockchain technologies.</b>"
                       </p>
                     </blockquote>
                   </Card>
@@ -318,7 +352,7 @@ class Landing extends React.Component {
                     </div>
                     <h3>Our Solution.</h3>
                     <p className="lead">
-                     Targeted Vaccination Drive
+                      Targeted Vaccination Drive
                     </p>
                     <p>
                       Medical Insurance
@@ -326,7 +360,7 @@ class Landing extends React.Component {
                     <p>
                       Medical Test for Government or Private Jobs
                     </p>
-                  
+
                   </div>
                 </Col>
               </Row>
@@ -354,7 +388,7 @@ class Landing extends React.Component {
                     <div className="pl-6">
                       <h4 className="display-3 text-white">Wide Ranges of UseCases</h4>
                       <p className="text-white">
-                
+
                       </p>
                     </div>
                   </div>
@@ -368,7 +402,7 @@ class Landing extends React.Component {
                         </div>
                         <div className="pl-4">
                           <h5 className="title text-success">
-                            Fool Proof Medical Certificate 
+                            Fool Proof Medical Certificate
                           </h5>
                           <p>
                             The Arctic Ocean freezes every winter and much of
@@ -396,14 +430,14 @@ class Landing extends React.Component {
                         </div>
                         <div className="pl-4">
                           <h5 className="title text-warning">
-                           Readiness for forthcoming epidamic
+                            Readiness for forthcoming epidamic
                           </h5>
                           <p>
                             The Arctic Ocean freezes every winter and much of
                             the sea-ice then thaws every summer, and that
                             process will continue whatever.
                           </p>
-                      
+
                         </div>
                       </div>
                     </CardBody>
@@ -433,49 +467,49 @@ class Landing extends React.Component {
               <Row className="justify-content-center text-center mb-lg">
                 <Col lg="8">
                   <h2 className="display-3">Incorporated Suggestion by Jury Members</h2>
-                  
-                   
-               
+
+
+
                 </Col>
               </Row>
               <Row>
                 <Col className="mb-5 mb-lg-0" lg="4" md="6">
                   <div className="px-4">
-                    
+
                     <div className="pt-4 text-center">
                       <h5 className="title">
                         <span className="d-block mb-1"> Interactive and Eye-Catching User Interface</span>
-                  
+
                       </h5>
-                 
+
                     </div>
                   </div>
                 </Col>
                 <Col className="mb-5 mb-lg-0" lg="4" md="6">
                   <div className="px-4">
-                  
+
                     <div className="pt-4 text-center">
                       <h5 className="title">
                         <span className="d-block mb-1"> End to End Applications Development</span>
-                      
+
                       </h5>
-                   
+
                     </div>
                   </div>
                 </Col>
                 <Col className="mb-5 mb-lg-0" lg="" md="6">
                   <div className="px-4">
-                  
+
                     <div className="pt-4 text-center">
                       <h5 className="title">
                         <span className="d-block mb-1">Two step encryption of Data</span>
-                    
+
                       </h5>
-                     
+
                     </div>
                   </div>
                 </Col>
-              
+
               </Row>
             </Container>
           </section>
@@ -484,18 +518,18 @@ class Landing extends React.Component {
               <Card className="bg-gradient-warning shadow-lg border-0">
                 <div className="p-5">
                   <Row className="align-items-center">
-                    
-                      <h3 className="text-white">
-                        "IT'S Gonna be the UPI in the Medical Field "
-                      </h3>
-                    
+
+                    <h3 className="text-white">
+                      "IT'S Gonna be the UPI in the Medical Field "
+                    </h3>
+
                   </Row>
                 </div>
               </Card>
             </Container>
           </section>
-         
-         
+
+
           <Download />
         </main>
         <CardsFooter />

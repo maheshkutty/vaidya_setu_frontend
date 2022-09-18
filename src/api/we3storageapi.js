@@ -6,8 +6,6 @@ const Web3StorageApiPut = async (path) => {
 
   const storage = new Web3Storage({ token });
   const files = [];
-  // const pathFiles = await getFilesFromPath(path)
-  // files.push(...pathFiles)
   const cid = await storage.put(path);
   return cid;
 };

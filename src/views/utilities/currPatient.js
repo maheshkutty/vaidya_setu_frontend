@@ -212,25 +212,6 @@ function UIColor({ userSession }) {
           </Card>
         </Zoom>
       </Modal>
-
-      {/* <Grid container spacing={gridSpacing}>
-                <Grid item xs={12}>
-                    <SubCard >
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Typography>Name</Typography>
-                            </Grid>
-                            <Grid item xs={2}>
-
-                            </Grid>
-                            <Grid item xs={4}>
-                                <Button variant="outlined" onClick={RequestPatient()} size="large" sx={{ mt: 0.5 }}>Send Request</Button>
-                            </Grid>
-                        </Grid>
-
-                    </SubCard>
-                </Grid>
-            </Grid> */}
     </MainCard>
   );
 }
