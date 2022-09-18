@@ -9,6 +9,7 @@ const DashboardDefault = Loadable(
   lazy(() => import("views/dashboard/Default"))
 );
 
+
 // utilities routing
 const UtilsTypography = Loadable(
   lazy(() => import("views/utilities/vadiyaSetu.js"))
@@ -46,10 +47,6 @@ const MainRoutes = {
   path: "/",
   element: <MainLayout />,
   children: [
-    // {
-    //     path: '/',
-    //     element: <DashboardDefault />
-    // },
     {
       path: "dashboard",
       children: [
