@@ -19,8 +19,6 @@ import AuthContext from 'AuthContext';
 
 const Header = ({ handleLeftDrawerToggle }) => {
     const theme = useTheme();
-    const AuthState = useContext(AuthContext);
-
     return (
         <>
             {/* logo & toggler button */}

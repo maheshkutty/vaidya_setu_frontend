@@ -7,23 +7,6 @@ import {
   IconFileCheck,
   IconReportMedical,
 } from "@tabler/icons";
-import AuthContext from "AuthContext";
-import { useContext } from "react";
-
-// const AuthState = useContext(AuthContext);
-// const [isLoading, setLoading] = useState(true);
-//     useEffect(() => {
-//         setLoading(false);
-//         if( AuthState.state.id ){
-//           if( AuthState.state.role !== 'pat'  ){
-//             history("/utils/patient-history");
-//           }
-//         }else{
-//           history("/login");
-//         }
-
-//     }, []);
-// constant
 const icons = {
   IconId,
   IconUserCheck,
@@ -67,14 +50,14 @@ const patUtils = {
           id: "tabler-Pending-Approvals",
           title: "Pending Approvals",
           type: "item",
-          url: "/icons/pendingApprovals",
+          url: "/utils/pending-approval",
           breadcrumbs: false,
         },
         {
           id: "material-Approvals-History",
           title: "Approvals History",
           type: "item",
-          url: "/icons/material-icons",
+          url: "/utils/approval-history",
           breadcrumbs: false,
         },
       ],

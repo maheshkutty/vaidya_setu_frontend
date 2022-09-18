@@ -3,46 +3,27 @@ import { useState } from "react";
 // material-ui
 import { useTheme } from "@mui/material/styles";
 import {
-  Box,
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  Avatar,
-  Button,
-  CardActions,
-  Divider,
-  Menu,
-  MenuItem,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Paper,
   TablePagination,
-  Tooltip,
-  IconButton,
 } from "@mui/material";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import MuiTableHead from "@material-ui/core/TableHead";
+import { connect } from "react-redux";
 // project imports
-import SubCard from "ui-component/cards/SubCard";
 import MainCard from "ui-component/cards/MainCard";
 import SkeletonPopularCard from "ui-component/cards/Skeleton/PopularCard";
-import { gridSpacing } from "store/constant";
+
 // assets
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { add, format, differenceInCalendarDays, isFuture } from "date-fns";
-import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
-import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
-import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
-import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
 
 // ===============================|| ApprovalHistory ||=============================== //
 
-const ApprovalHistory = ({ isLoading }) => {
+const ApprovalHistory = ({ isLoading, userSession }) => {
   const theme = useTheme();
 
   const dateFormatter = (date) => {
@@ -161,41 +142,13 @@ const ApprovalHistory = ({ isLoading }) => {
 
 ApprovalHistory.propTypes = {
   isLoading: PropTypes.bool,
+  userSession: PropTypes.userSession
 };
 
-export default ApprovalHistory;
+const mapStateToProps = (state) => {
+  return {
+    userSession: state.userSession,
+  };
+};
 
-{
-  /* <Grid item xs={3}>
-                                        <MoreHorizOutlinedIcon
-                                            fontSize="small"
-                                            sx={{
-                                                color: theme.palette.primary[200],
-                                                cursor: 'pointer'
-                                            }}
-                                            aria-controls="menu-popular-card"
-                                            aria-haspopup="true"
-                                            onClick={handleClick}
-                                        />
-                                        <Menu
-                                            id="menu-popular-card"
-                                            anchorEl={anchorEl}
-                                            keepMounted
-                                            open={Boolean(anchorEl)}
-                                            onClose={handleClose}
-                                            variant="selectedMenu"
-                                            anchorOrigin={{
-                                                vertical: 'bottom',
-                                                horizontal: 'right'
-                                            }}
-                                            transformOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right'
-                                            }}
-                                        >
-                                            <MenuItem onClick={handleClose}> Today</MenuItem>
-                                            <MenuItem onClick={handleClose}> This Month</MenuItem>
-                                            <MenuItem onClick={handleClose}> This Year </MenuItem>
-                                        </Menu>
-                            </Grid> */
-}
+export default connect(mapStateToProps, { })(ApprovalHistory);

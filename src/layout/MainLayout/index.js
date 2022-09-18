@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
+import { connect } from "react-redux";
 
 // material-ui
 import { styled, useTheme } from "@mui/material/styles";
@@ -17,7 +18,7 @@ import Breadcrumbs from "ui-component/extended/Breadcrumbs";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Customization from "../Customization";
-import navigation from "menu-items";
+import getMenuFunc from "menu-items";
 import { drawerWidth } from "store/constant";
 import { SET_MENU } from "store/actions";
 
@@ -78,7 +79,8 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
 
 // ==============================|| MAIN LAYOUT ||============================== //
 
-const MainLayout = () => {
+const MainLayout = (props) => {
+  const navigation = getMenuFunc(props.userSession)
   const theme = useTheme();
   const matchDownMd = useMediaQuery(theme.breakpoints.down("lg"));
 
@@ -138,4 +140,10 @@ const MainLayout = () => {
   );
 };
 
-export default MainLayout;
+const mapStateToProps = (state) => {
+  return {
+    userSession: state.userSession,
+  };
+};
+
+export default connect(mapStateToProps, {})(MainLayout);

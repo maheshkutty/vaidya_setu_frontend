@@ -15,16 +15,7 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-
-// project imports
-import SubCard from "ui-component/cards/SubCard";
-import MainCard from "ui-component/cards/MainCard";
-import SkeletonPopularCard from "ui-component/cards/Skeleton/PopularCard";
-import { gridSpacing } from "store/constant";
-// assets
-import { add, format, differenceInCalendarDays, isFuture } from "date-fns";
-import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
-
+import { connect } from "react-redux";
 import { useContext, useEffect } from "react";
 import AuthContext from "AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -43,11 +34,11 @@ import { RowingTwoTone } from "@mui/icons-material";
 // ===============================|| PenApprovals ||=============================== //
 
 const getRequestsData = async (AuthState) => {
-  console.log(AuthState.state.id);
+  console.log(AuthState);
   let response = await health.get("/patient/showreq", {
     headers: {
-      pid: AuthState.state.id,
-      Authorization: "Bearer " + AuthState.state.auth_token,
+      pid: AuthState.id,
+      Authorization: "Bearer " + AuthState.accessToken,
     },
   });
   response = await response.data;
@@ -55,33 +46,30 @@ const getRequestsData = async (AuthState) => {
   return response;
 };
 
-function AcceptReq(AuthState, row) {
+async function AcceptReq(AuthState, row) {
   var data = {
     aid: row.aid,
     did: row.did,
   };
   console.log("Button Dabaya");
-  let response = health.post("/patient/grant", (data = data), {
+  let response = await health.post("/patient/grant", (data = data), {
     headers: {
       pid: row.pid,
-      Authorization: "Bearer " + AuthState.state.auth_token,
+      Authorization: "Bearer " + AuthState.accessToken,
     },
   });
-  response = response.data;
-
+  response = await response.data;
   return response;
 }
 
-const PenApprovals = () => {
+const PenApprovals = ({ userSession }) => {
   const theme = useTheme();
-
-  const AuthState = useContext(AuthContext);
   var isEmpty = false;
-  var history = useNavigate();
   const [patientList, setPatientList] = useState([]);
+
   useEffect(() => {
     async function someFunc() {
-      let respons = await getRequestsData(AuthState);
+      let respons = await getRequestsData(userSession);
       if (respons.status === "success") {
         if (respons.payload.length > 0) {
           setPatientList(respons.payload);
@@ -90,18 +78,9 @@ const PenApprovals = () => {
           console.log("erwt");
         }
       }
-      console.log(respons, AuthState.state.id);
+      console.log(respons);
     }
-
-    if (AuthState.state.id) {
-      if (AuthState.state.role !== "pat") {
-        history("/utils/patient-history");
-      } else {
-        someFunc();
-      }
-    } else {
-      history("/login");
-    }
+    someFunc()
   }, []);
 
   return (
@@ -135,7 +114,7 @@ const PenApprovals = () => {
                       backgroundColor: theme.palette.success.light,
                       color: theme.palette.success.dark,
                     }}
-                    onClick={() => AcceptReq(AuthState, row)}
+                    onClick={() => AcceptReq(userSession, row)}
                   >
                     Accept
                   </Button>
@@ -171,4 +150,10 @@ const PenApprovals = () => {
 //   isLoading: PenApprovals.bool,
 // };
 
-export default PenApprovals;
+const mapStateToProps = (state) => {
+  return {
+    userSession: state.userSession,
+  };
+};
+
+export default connect(mapStateToProps, { })(PenApprovals);

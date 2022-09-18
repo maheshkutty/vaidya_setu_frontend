@@ -58,6 +58,9 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 }));
 
 const VadiyaSetu = ({ userSession }) => {
+  const theme = useTheme();
+  var history = useNavigate();
+  const [UserData, setUserData] = useState([]);
   const getRequestsData = async () => {
     console.log(userSession.id);
     var data = { email: userSession.email };
@@ -68,34 +71,20 @@ const VadiyaSetu = ({ userSession }) => {
       },
     });
     response = await response.data;
+    console.log(response)
     return response;
   };
 
-  const theme = useTheme();
-  const AuthState = useContext(AuthContext);
-  var history = useNavigate();
-  const [UserData, setUserData] = useState([]);
-
-  // const [patientList, setPatientList] = useState([]);
   useEffect(() => {
     async function someFunc() {
-      let respons = await getRequestsData(AuthState);
+      let respons = await getRequestsData();
       if (respons.status === "success") {
         console.log(respons.payload);
         setUserData(respons.payload);
       }
-      console.log(respons, AuthState.state.id);
+      console.log(respons);
     }
-
-    if (AuthState.state.id) {
-      if (AuthState.state.role !== "pat") {
-        history("/utils/patient-history");
-      } else {
-        someFunc();
-      }
-    } else {
-      history("/login");
-    }
+    someFunc()
   }, []);
 
   return (
@@ -361,7 +350,7 @@ const VadiyaSetu = ({ userSession }) => {
                         >
                           <ListItemAvatar>
                             <QRCode
-                              value={AuthState.state.id}
+                              value={userSession.id}
                               bgColor="#1D88E5"
                               fgColor="#DFF6FF"
                               size={152}
@@ -386,7 +375,7 @@ const VadiyaSetu = ({ userSession }) => {
                       </Grid>
                       <Grid item>
                         <Typography variant="h2" color="inherit">
-                          {AuthState.state.id}
+                          {userSession.id}
                         </Typography>
                       </Grid>
                     </Grid>

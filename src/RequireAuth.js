@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 function RequireAuth({ children, auth }) {
-  if (auth.uid === "") return <Navigate to="/login" />;
+  if (auth.id === "" || auth.id === undefined) return <Navigate to="/login" />;
   return children;
 }
 

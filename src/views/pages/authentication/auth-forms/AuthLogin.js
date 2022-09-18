@@ -53,8 +53,11 @@ const FirebaseLogin = (props) => {
 
   useEffect(() => {
     console.log(props.userSession)
-    if (props.userSession.id != "" && props.userSession.id != undefined ) {
-      navigate("/utils/vadiyasetu-card");
+    if (props.userSession.id != "" && props.userSession.id != undefined) {
+      if (checked)
+        navigate("/utils/patient-history");
+      else
+        navigate("/utils/vadiyasetu-card");
     }
   }, [props.userSession]);
 
@@ -62,8 +65,9 @@ const FirebaseLogin = (props) => {
     var data = {
       email: values.email,
       password: values.password,
+      role: checked ? "doc" : "pat",
     };
-    props.loginAction({ email: data.email, password: data.password });
+    props.loginAction({ email: data.email, password: data.password, role: data.role });
   }
 
   return (
@@ -96,8 +100,8 @@ const FirebaseLogin = (props) => {
 
       <Formik
         initialValues={{
-          email: "jagannath.patta@spit.ac.in",
-          password: "jaggu123",
+          email: "",
+          password: "",
           role: "doc",
           submit: null,
         }}

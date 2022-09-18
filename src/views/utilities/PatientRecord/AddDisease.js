@@ -5,6 +5,7 @@ import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
+import { connect } from "react-redux";
 import { TextField, Box, Button, Chip, Grid, Stack, Card } from "@mui/material";
 import TreatmentForm from "./TreatmentForm";
 import DiagonisForm from "./DiagonisForm";
@@ -51,7 +52,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
-export default function CustomizedAccordions({ route }) {
+function CustomizedAccordions({ userSession }) {
   const [name, setName] = React.useState("");
   const [desc, setDesc] = React.useState("");
   const [expanded, setExpanded] = React.useState("panel1");
@@ -61,8 +62,6 @@ export default function CustomizedAccordions({ route }) {
   const [tDesc, settDesc] = React.useState(null);
   const [drugsName, setDrugsName] = React.useState(null);
   const [drugsReport, setDrugsReport] = React.useState([]);
-  const AuthState = React.useContext(AuthContext);
-  var history = useNavigate();
   const { state } = useLocation();
   const { pid } = state;
 
@@ -75,12 +74,6 @@ export default function CustomizedAccordions({ route }) {
   };
 
   React.useEffect(() => {
-    if (AuthState.state.id) {
-      if (AuthState.state.role !== "doc") {
-        history("/login");
-      }
-    }
-
     async function getRecord() {
       let response = await health.get(`/doctor/patient/PYm3D-Q4kf`);
       response = await response;
@@ -118,8 +111,8 @@ export default function CustomizedAccordions({ route }) {
       console.log(data);
       let respons = await health.post("/doctor/patient/record", data, {
         headers: {
-          Authorization: "Bearer " + AuthState.state.accessToken,
-          did: AuthState.state.id,
+          Authorization: "Bearer " + userSession.accessToken,
+          did: userSession.id,
         },
       });
       respons = await respons.data;
@@ -226,3 +219,11 @@ export default function CustomizedAccordions({ route }) {
     </div>
   );
 }
+
+const mapStateToProps = (state) => {
+	return {
+		userSession: state.userSession,
+	};
+};
+
+export default connect(mapStateToProps, {  })(CustomizedAccordions);

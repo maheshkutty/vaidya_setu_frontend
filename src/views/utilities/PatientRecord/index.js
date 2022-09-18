@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import _ from "lodash";
+import { connect } from "react-redux";
 
 // material-ui
 import {
@@ -128,11 +129,10 @@ function a11yProps(index) {
 
 // ===============================|| UI COLOR ||=============================== //
 
-const UIColor = () => {
+const UIColor = ({ userSession }) => {
   var history = useNavigate();
   const { state } = useLocation();
   const { pid } = state;
-  const AuthState = useContext(AuthContext);
 
   const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -272,8 +272,8 @@ const UIColor = () => {
     async function getRecord() {
       let response = await health.get(`/doctor/patient/${pid}`, {
         headers: {
-          Authorization: "Bearer " + AuthState.state.accessToken,
-          did: AuthState.state.id,
+          Authorization: "Bearer " + userSession.accessToken,
+          did: userSession.id,
         },
       });
 
@@ -505,4 +505,11 @@ const UIColor = () => {
     </MainCard>
   );
 };
-export default UIColor;
+
+const mapStateToProps = (state) => {
+	return {
+		userSession: state.userSession,
+	};
+};
+
+export default connect(mapStateToProps, { })(UIColor);

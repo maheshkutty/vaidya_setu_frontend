@@ -23,7 +23,7 @@ const Utilscurrpatient = Loadable(
   lazy(() => import("views/utilities/currPatient"))
 );
 const UtilsShadow = Loadable(lazy(() => import("views/utilities/Shadow")));
-const UtilsMaterialIcons = Loadable(
+const UtilsPastApproval = Loadable(
   lazy(() => import("views/utilities/PastApprovals"))
 );
 const UtilsPendingApprovals = Loadable(
@@ -124,20 +124,20 @@ const MainRoutes = {
       ],
     },
     {
-      path: "icons",
+      path: "utils",
       children: [
         {
-          path: "pendingApprovals",
-          element: <UtilsPendingApprovals />,
+          path: "pending-approval",
+          element: <RequireAuth><UtilsPendingApprovals /></RequireAuth>,
         },
       ],
     },
     {
-      path: "icons",
+      path: "utils",
       children: [
         {
-          path: "material-icons",
-          element: <UtilsMaterialIcons />,
+          path: "approval-history",
+          element: <UtilsPastApproval />,
         },
       ],
     },

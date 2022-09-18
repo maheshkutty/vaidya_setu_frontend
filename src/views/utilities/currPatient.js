@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React, { useState } from "react";
 import Modal from "@mui/material/Modal";
 import Zoom from "@mui/material/Zoom";
-
+import { connect } from "react-redux";
 import CardContent from "@mui/material/CardContent";
 
 // material-ui
@@ -11,7 +11,6 @@ import { Box, Card, Grid, Typography } from "@mui/material";
 // project imports
 import SubCard from "ui-component/cards/SubCard";
 import MainCard from "ui-component/cards/MainCard";
-import SecondaryAction from "ui-component/cards/CardSecondaryAction";
 import { gridSpacing } from "store/constant";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -67,15 +66,12 @@ ColorBox.propTypes = {
 
 // ===============================|| UI COLOR ||=============================== //
 
-function UIColor() {
+function UIColor({ userSession }) {
   const [open, setOpen] = React.useState(false);
-
   const [pid_req, setpid_req] = React.useState();
-
   const [respon, setrespon] = React.useState({ patientData: { name: "" } });
-
   const [checked, setChecked] = React.useState(false);
-  var AuthState = useContext(AuthContext);
+
   var history = useNavigate();
 
   const handleOpen = () => {
@@ -87,12 +83,11 @@ function UIColor() {
     // console.log(id,AuthState);
     var data = { pid: id };
     console.log(data);
-
-    console.log(AuthState.state);
+    console.log(AuthState);
     let response = await health.post("/doctor/search", (data = data), {
       headers: {
-        did: AuthState.state.id,
-        Authorization: "Bearer " + AuthState.state.auth_token,
+        did: AuthState.id,
+        Authorization: "Bearer " + AuthState.accessToken,
       },
     });
 
@@ -107,8 +102,8 @@ function UIColor() {
     var data = { pid: id };
     let response = await health.post("/doctor/request", (data = data), {
       headers: {
-        did: AuthState.state.id,
-        Authorization: "Bearer " + AuthState.state.auth_token,
+        did: AuthState.id,
+        Authorization: "Bearer " + AuthState.accessToken,
       },
     });
     response = await response.data;
@@ -116,6 +111,7 @@ function UIColor() {
     handleClose();
     return response;
   }
+
   function GetPatientData(id, AuthState) {
     history("/utils/patient-record", {
       state: {
@@ -161,7 +157,7 @@ function UIColor() {
               <Grid item xs={4}>
                 <Button
                   variant="outlined"
-                  onClick={(event) => SearchPatient(pid_req, AuthState)}
+                  onClick={(event) => SearchPatient(pid_req, userSession)}
                   size="large"
                   sx={{ mt: 0.5 }}
                 >
@@ -195,7 +191,7 @@ function UIColor() {
               {respon.access == 0 ? (
                 <Button
                   variant="outlined"
-                  onClick={(event) => RequestPatient(pid_req, AuthState)}
+                  onClick={(event) => RequestPatient(pid_req, userSession)}
                   size="large"
                   sx={{ mt: 0.5 }}
                 >
@@ -204,7 +200,7 @@ function UIColor() {
               ) : (
                 <Button
                   variant="outlined"
-                  onClick={(event) => GetPatientData(pid_req, AuthState)}
+                  onClick={(event) => GetPatientData(pid_req, userSession)}
                   size="large"
                   sx={{ mt: 0.5 }}
                 >
@@ -239,4 +235,10 @@ function UIColor() {
   );
 }
 
-export default UIColor;
+const mapStateToProps = (state) => {
+  return {
+    userSession: state.userSession,
+  };
+};
+
+export default connect(mapStateToProps, { })(UIColor);

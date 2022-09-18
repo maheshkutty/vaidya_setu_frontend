@@ -1,5 +1,5 @@
 const loginReducer = (
-    state = { errMsg: null, accessToken: "", email: "", id : "", refreshToken:"" },
+    state = { errMsg: null, accessToken: "", email: "", id : "", refreshToken:"", role:"" },
     action
   ) => {
     switch (action.type) {
