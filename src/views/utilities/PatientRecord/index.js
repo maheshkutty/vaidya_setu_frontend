@@ -363,11 +363,11 @@ const UIColor = ({ userSession }) => {
       //response = await response
       console.log("set patient dat");
       if (response.status == "success") {
-        if (response.patientData.record.length > 0) {
+        //if (response.patientData.record.length > 0) {
           console.log("true");
           setPatientRecordState(response);
           setPatientRecordCnt(response.patientData.record.map(() => false));
-        }
+        //}
       }
     }
     getRecord();

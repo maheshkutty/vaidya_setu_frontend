@@ -182,10 +182,10 @@ function UIColor({ userSession }) {
           <Card sx={style}>
             <CardContent>
               <Typography variant="h3" color="inherit" sx={{ mx: "1" }}>
-                {respon.patientData.name}
+                {respon.patientData.patient == undefined ? null : respon.patientData.patient.name}
               </Typography>
               <Typography variant="subtitle1" color="inherit">
-                {respon.patientData.email}
+                {respon.patientData.patient == undefined ? null : respon.patientData.patient.email}
               </Typography>
               <br></br>
               {respon.access == 0 ? (
@@ -222,4 +222,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { })(UIColor);
+export default connect(mapStateToProps, {})(UIColor);
